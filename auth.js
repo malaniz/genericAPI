@@ -65,6 +65,7 @@ exports.login = function (db, secret, jwt) {
     if (req.headers.authorization) {
       usr = jwt.decode(req.headers.authorization.replace('bearer ', ''));
     }
+    console.log(req.body);
     req.body.credentials.password = md5(req.body.credentials.password);
     db.get('users').findOne(req.body.credentials)
     .success( function (usr) {

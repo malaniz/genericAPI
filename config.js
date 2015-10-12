@@ -1,4 +1,4 @@
-var domain = 'http://localhost:6661';
+var domain = 'http://localhost:6666';
 var config = {
   development: {
        MAIL: { 
@@ -10,7 +10,7 @@ var config = {
        APP: {
          DB_URL: 'localhost/etalonario',
          CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
-         PORT: process.env.PORT || 6666,
+         PORT: process.env.PORT || 8080,
          TMP_DIR: 'tmp/',
          UPLOAD_DIR: __dirname + '/app/uploads/'
        },

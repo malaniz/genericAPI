@@ -1,19 +1,18 @@
-var express    = require('express')
-  , http       = require('http')
-  , path       = require('path')
-  , bodyParser = require('body-parser')
-  , app        = express()
-  , config     = require('./config').init(app)
-  , db         = require('monk')(config.APP.DB_URL)
-  , session    = require('express-session')
-  , api        = require('./api.js')
-  , mail       = require('./mail.js')
-  , auth       = require('./auth')
-  , passport   = require('passport')
-  , jwt        = require('jsonwebtoken')
-  , expressJwt = require('express-jwt')
-  , secret     = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$"
-  ;
+var express    = require('express'),
+    http       = require('http'),
+    path       = require('path'),
+    bodyParser = require('body-parser'),
+    app        = express(),
+    config     = require('./config').init(app),
+    db         = require('monk')(config.APP.DB_URL),
+    session    = require('express-session'),
+    api        = require('./api.js'),
+    mail       = require('./mail.js'),
+    auth       = require('./auth'),
+    passport   = require('passport'),
+    jwt        = require('jsonwebtoken'),
+    expressJwt = require('express-jwt'),
+    secret     = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
 
 
 mail.init(config);

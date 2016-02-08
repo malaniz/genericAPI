@@ -1,5 +1,4 @@
-var md5  = require('MD5')
-;
+var md5  = require('MD5');
 
 exports.signup = function (db, mail) {
   return function (req, res) {
@@ -13,8 +12,8 @@ exports.signup = function (db, mail) {
         res.status(500).json({ err: 'ERR_USR_EXIST'});
         return;
       } else {
-        // habria que ver si se puede guardar el token que luego 
-        // se usa para auth. Asi cada vez que inica el dispositivo y si se 
+        // habria que ver si se puede guardar el token que luego
+        // se usa para auth. Asi cada vez que inica el dispositivo y si se
         // reinicio el server ... no pierde el login.
         token = mail.sendConfirmateMail(req.body.username);
         req.body.signup.approved = false;
@@ -23,12 +22,11 @@ exports.signup = function (db, mail) {
         req.body.signup.ready    = false;
 
         db.get('users').insert(req.body.signup, function(err, doc) {
-          res.json({ res: 'OP_OK', data: req.body.signup });
+            res.status(200).json({ res: 'OP_OK', data: req.body.signup });
         });
       }
 
     });
-  
   };
 };
 
@@ -38,23 +36,23 @@ exports.confirm = function (db) {
     req.checkParams('token', 'invalid').len(15, 200);
     var errors = req.validationErrors();
     if (errors) {
-      res.json({
+        res.status(200).json({
         err: 'Invalid parameters',
         errors: errors
       }, 500);
       return;
     }
     var users = db.get('users');
-    users.update({ token: req.param('token') }, {
+      users.update({ token: req.params.token }, {
       $set: {
         approved: true,
       }
     }, function(err, data) {
-      if (err || (data == 0)) {
+      if (err || (data === 0)) {
         res.status(401).json({ err: 'ERR_TOKEN_NOT_EXIST' });
         return;
       }
-      res.json({ res: 'OP_OK' });
+        res.status(200).json({ res: 'OP_OK' });
     });
   };
 };
@@ -71,7 +69,7 @@ exports.login = function (db, secret, jwt) {
     .success( function (usr) {
       if (usr) {
         var token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
-        res.json({ token: token });
+          res.status(200).json({ token: token });
       } else {
         res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
       }
@@ -82,9 +80,8 @@ exports.login = function (db, secret, jwt) {
   };
 };
 
-   
 exports.logged  = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
   res.status(401).json({err: "ERR_NOT LOGGED"});
-}
+};

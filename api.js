@@ -11,7 +11,3 @@ exports.otro = function(db) {
     res.json({"data": "otro restringido"});
   };
 };
-
-
-
-

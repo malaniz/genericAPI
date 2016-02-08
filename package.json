@@ -15,7 +15,7 @@
     "mongodb": "^1.4.40",
     "monk": "^1.0.1",
     "nodemailer": "^1.3.4",
-    "passport": "^0.2.2",
+    "passport": "^0.2.2"
   },
   "devDependencies": {},
   "scripts": {

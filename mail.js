@@ -1,8 +1,8 @@
-var nodemailer = require('nodemailer')
-  , md5 = require('MD5')
-  , smtpTransport = null
-  , urlConfirmMail = null
-  , mailOptions = {};
+var nodemailer     = require('nodemailer'),
+    md5            = require('MD5'),
+    smtpTransport  = null,
+    urlConfirmMail = null,
+    mailOptions    = {};
 
 exports.init = function (conf) {
   urlConfirmMail = conf.APP.CONFIRM_ACCOUNT_LINK;
@@ -31,9 +31,9 @@ exports.sendMail = function (to, subject, body, isHtmlBody) {
   });
 };
 exports.sendConfirmateMail = function (to) {
-  var subject = 'Por favor, confirma tu email. Eatnow!'
-    , token = md5(Date() + to)
-    , html = getLinkConfirmate(to, token);
+  var subject = 'Por favor, confirma tu email. Eatnow!',
+      token   = md5(Date() + to),
+      html    = getLinkConfirmate(to, token);
   //this.sendMail(to, subject, html, true);
   return token;
 };

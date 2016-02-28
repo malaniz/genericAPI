@@ -28,9 +28,7 @@ app.use( require('express-validator')()                                    );
 //aca habilitamos la url para la app angular
 //
 //app.use( '/app', express.static(path.join(__dirname, 'app')));
-app.get('/',function(req,res){
-  res.json({"error" : false, "message" : "Hello !"});
-});
+
 app.post( '/signup'         , auth.signup(db, mail)        );
 app.get ( '/confirm/:token' , auth.confirm(db)             );
 app.post( '/login'          , auth.login(db, secret, jwt)  );

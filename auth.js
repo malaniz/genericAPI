@@ -67,10 +67,8 @@ exports.login = function (db, secret, jwt) {
     req.body.credentials.password = md5(req.body.credentials.password);
     db.get('users').findOne(req.body.credentials)
     .success( function (usr) {
-
       if (usr) {
         var token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
-          console.log("yes");
           res.status(200).json({ token: token });
       } else {
         res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });

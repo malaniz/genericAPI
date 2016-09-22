@@ -15,6 +15,7 @@ mongodb
 .*.sw?
 .~*
 .tmp
+.tern-port
 app/bower_components/*
 app/bower_components
 app/uploads

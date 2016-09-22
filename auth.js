@@ -24,7 +24,6 @@ exports.signup = function (db, mail) {
             res.json({ res: 'OP_OK', data: req.body.signup });
           });
         }
-
       });
   };
 };
@@ -35,14 +34,14 @@ exports.confirm = function (db) {
     req.checkParams('token', 'invalid').len(15, 200);
     var errors = req.validationErrors();
     if (errors) {
-      res.json({
+        res.status(200).json({
         err: 'Invalid parameters',
         errors: errors
       }, 500);
       return;
     }
     var users = db.get('users');
-    users.update({ token: req.param('token') }, {
+      users.update({ token: req.params.token }, {
       $set: {
         approved: true,
       }
@@ -51,7 +50,7 @@ exports.confirm = function (db) {
         res.status(401).json({ err: 'ERR_TOKEN_NOT_EXIST' });
         return;
       }
-      res.json({ res: 'OP_OK' });
+        res.status(200).json({ res: 'OP_OK' });
     });
   };
 };

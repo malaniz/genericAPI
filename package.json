@@ -8,6 +8,7 @@
   "dependencies": {
     "MD5": "^1.2.2",
     "body-parser": "^1.13.2",
+    "cors": "^2.8.1",
     "express": "^4.12.4",
     "express-jwt": "^3.0.1",
     "express-session": "^1.11.3",

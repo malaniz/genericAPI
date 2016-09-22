@@ -1,5 +1,4 @@
-var md5  = require('MD5')
-;
+var md5  = require('MD5');
 
 exports.signup = function (db, mail) {
   return function (req, res) {
@@ -8,27 +7,25 @@ exports.signup = function (db, mail) {
 
     // existe el usuario?
     db.get('users').findOne({ username: req.body.signup.username})
-    .success(function(usr) {
-      if (usr) {
-        res.status(500).json({ err: 'ERR_USR_EXIST'});
-        return;
-      } else {
-        // habria que ver si se puede guardar el token que luego 
-        // se usa para auth. Asi cada vez que inica el dispositivo y si se 
-        // reinicio el server ... no pierde el login.
-        token = mail.sendConfirmateMail(req.body.username);
-        req.body.signup.approved = false;
-        req.body.signup.password = md5(req.body.signup.password);
-        req.body.signup.token    = token;
-        req.body.signup.ready    = false;
+      .success(function(usr) {
+        if (usr) {
+          res.status(500).json({ err: 'ERR_USR_EXIST'});
+          return;
+        } else {
+          // habria que ver si se puede guardar el token que luego 
+          // se usa para auth. Asi cada vez que inica el dispositivo y si se 
+          // reinicio el server ... no pierde el login.
+          token = mail.sendConfirmateMail(req.body.username);
+          req.body.signup.approved = true;
+          req.body.signup.password = md5(req.body.signup.password);
+          req.body.signup.token    = token;
 
-        db.get('users').insert(req.body.signup, function(err, doc) {
-          res.json({ res: 'OP_OK', data: req.body.signup });
-        });
-      }
+          db.get('users').insert(req.body.signup, function(err, doc) {
+            res.json({ res: 'OP_OK', data: req.body.signup });
+          });
+        }
 
-    });
-  
+      });
   };
 };
 
@@ -50,7 +47,7 @@ exports.confirm = function (db) {
         approved: true,
       }
     }, function(err, data) {
-      if (err || (data == 0)) {
+      if (err || (data === 0)) {
         res.status(401).json({ err: 'ERR_TOKEN_NOT_EXIST' });
         return;
       }
@@ -59,31 +56,38 @@ exports.confirm = function (db) {
   };
 };
 
-
 exports.login = function (db, secret, jwt) {
   return function (req, res) {
     if (req.headers.authorization) {
       usr = jwt.decode(req.headers.authorization.replace('bearer ', ''));
     }
-    req.body.credentials.password = md5(req.body.credentials.password);
-    db.get('users').findOne(req.body.credentials)
-    .success( function (usr) {
-      if (usr) {
-        var token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
-        res.json({ token: token });
-      } else {
-        res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
-      }
-    })
-    .error( function (err) {
-      res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
-    });
+    if ('credentials' in req.body) {
+      req.body.credentials.password = md5(req.body.credentials.password);
+      console.log(JSON.stringify(req.body.credentials));
+      db.get('users').findOne(req.body.credentials)
+        .then( function (usr) {
+          if (usr!== null) {
+            var token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
+            usr.token = token;
+            usr.id = usr._id;
+            delete usr.password;
+            delete usr.username;
+            res.json(usr);
+          } else {
+            res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
+          }
+        },
+        function (err) {
+          res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
+        });
+    } else {
+      res.status(404).json({ err: 'ERR_NO_CREDENTIALS' });
+    }
   };
 };
 
-   
 exports.logged  = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
   res.status(401).json({err: "ERR_NOT LOGGED"});
-}
+};

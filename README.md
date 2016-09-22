@@ -1,3 +1,8 @@
-# APIBASE #
+Api Base
+========
+An API base with mongodb
 
-API base que sirve de templates para futuros proyectos.
+TODO
+====
+ACLs for entities
+

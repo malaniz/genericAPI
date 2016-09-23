@@ -9,6 +9,7 @@ var express    = require('express'),
     api        = require('./api')
     mail       = require('./mail'),
     auth       = require('./auth'),
+    errors     = require('./errors'),
     passport   = require('passport'),
     jwt        = require('jsonwebtoken'),
     expressJwt = require('express-jwt'),
@@ -40,9 +41,28 @@ app.post('/api/:entity/upd', api.gUpd(db));
 //app.post('/api2/:entity/fnd', auth.logged, api.gFnd(db)); 
 //app.post('/api2/:entity/agg', auth.logged, api2.gAgg(db)); 
 
+// Global error handler
+app.use((err, req, res, next) => {
+  if (!('error' in err)) {
+    console.log(err.stack); // Log stack error in console
+    res.status(500).send(errors.type.SERVER_ERROR);
+    return;
+  }
+
+  if (!(err.error in errors.type)){
+    res.status(500).send(errors.type.SERVER_ERROR);
+    return;
+  }
+
+  let e = errors.type[err.error];
+  delete err.error;
+  e.error = Object.assign({}, e.error, err);
+  res.status(e.error.code).json(e);
+});
+
 
 app.all('*', function(req, res){ 
-  res.status(404).json({ err: 'ROUTE_NOT_FOUND'});
+  res.status(404).json(errors.type.NOT_FOUND);
 });
 
 http.createServer(app).listen(config.APP.PORT, function() { 

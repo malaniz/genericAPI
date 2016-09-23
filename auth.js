@@ -1,7 +1,7 @@
 var md5  = require('MD5');
 
 exports.signup = function (db, mail) {
-  return function (req, res) {
+  return function (req, res, next) {
     var usr, users, token;
     console.log(req.body.signup);
 
@@ -9,7 +9,7 @@ exports.signup = function (db, mail) {
     db.get('users').findOne({ username: req.body.signup.username})
       .success(function(usr) {
         if (usr) {
-          res.status(500).json({ err: 'ERR_USR_EXIST'});
+          next({error: 'UNPROCESSABLE_ENTITY', message: 'User exist in the system'})
           return;
         } else {
           // habria que ver si se puede guardar el token que luego 
@@ -29,12 +29,12 @@ exports.signup = function (db, mail) {
 };
 
 exports.confirm = function (db) {
-  return function (req, res) {
+  return function (req, res, next) {
     req.checkParams('token', 'required').notEmpty();
     req.checkParams('token', 'invalid').len(15, 200);
     var errors = req.validationErrors();
     if (errors) {
-        res.status(200).json({
+        res.json({
         err: 'Invalid parameters',
         errors: errors
       }, 500);
@@ -47,16 +47,16 @@ exports.confirm = function (db) {
       }
     }, function(err, data) {
       if (err || (data === 0)) {
-        res.status(401).json({ err: 'ERR_TOKEN_NOT_EXIST' });
+        next({error: 'INVALID_CREDENTIALS', message: "Token don't exist"})
         return;
       }
-        res.status(200).json({ res: 'OP_OK' });
+        res.json({ res: 'OP_OK' });
     });
   };
 };
 
 exports.login = function (db, secret, jwt) {
-  return function (req, res) {
+  return function (req, res, next) {
     if (req.headers.authorization) {
       usr = jwt.decode(req.headers.authorization.replace('bearer ', ''));
     }
@@ -73,14 +73,14 @@ exports.login = function (db, secret, jwt) {
             delete usr.username;
             res.json(usr);
           } else {
-            res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
+            next({error: 'INVALID_CREDENTIALS'});
           }
         },
         function (err) {
-          res.status(401).json({ err: 'ERR_LOGIN_INCORRECT' });
+          next({error: 'INVALID_CREDENTIALS'});
         });
     } else {
-      res.status(404).json({ err: 'ERR_NO_CREDENTIALS' });
+      next({error: 'BAD_REQUEST'});
     }
   };
 };
@@ -88,5 +88,5 @@ exports.login = function (db, secret, jwt) {
 exports.logged  = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
-  res.status(401).json({err: "ERR_NOT LOGGED"});
+  next({error: 'INVALID_CREDENTIALS'});
 };

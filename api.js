@@ -1,29 +1,40 @@
+parseFilters = (x) => {
+  if (x instanceof Array) {
+    let oresult = [];
+    for (let i=0; i<x.length; i++) {
+      oresult[i] = parseFilters (x[i]);
+    }
+    return oresult;
+  }
+  if (typeof (x) === 'object' ) {
+    const ks = Object.keys(x);
+    let oresult = {};
+    for (let i=0; i<ks.length; i++) {
+      oresult[ks[i]] = parseFilters (x[ks[i]]);
+    }
+    return oresult;
+  } else if ((typeof (x) === 'string') && (x[0] === '/')) {
+    let r = '';
+    regParts = x.split('/').filter(y => y!== '');
+    if (regParts.length === 2) {
+      r = new RegExp(regParts[0], regParts[1]);
+    } else if (regParts.length === 1) {
+      r = new RegExp(regParts[0]);
+    }
+    return r;
+  } else {
+    return x;
+  }
+}
+
 exports.gLst = function(db){
   return function(req, res) {
     var filters = req.body.filters || {};
     var options = req.body.options || {};
     var keys,k, v, regParts, r;
 
-    keys = Object.keys(filters);
-    for (var i=0; i<keys.length; i++){
-      k = keys[i];
-      v = filters[k];
-
-      console.log(typeof v);
-      if (v[0] === '/') {
-        regParts = v.split('/').filter(function(x){ return x!== ''});
-        if (regParts.length === 2) {
-          r = new RegExp(regParts[0], regParts[1]);
-        } else if (regParts.length === 1) {
-          r = new RegExp(regParts[0]);
-        } else {
-          r = v;
-        }
-        filters[k] = r;
-        console.log(r);
-      }
-    }
     console.log(filters);
+    filters = parseFilters(filters);
     db.get(req.params.entity).find(filters, options, function(err, doc){
       if (err) {
         res.status(500).json({error: err});

@@ -5,7 +5,7 @@ var config = {
     // habria que setear usuarios por defecto
 
     APP: {
-      DB_URL: 'localhost/aniouno', 
+      DB_URL: 'localhost/xxx01', 
       CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
       PORT: process.env.PORT || 7778,
       TMP_DIR: 'tmp/',
@@ -37,7 +37,7 @@ var config = {
      },
 
     APP: {
-      DB_URL: 'localhost/aniouno',
+      DB_URL: 'localhost/xxx01',
       CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
       PORT: process.env.PORT || 7778,
       TMP_DIR: 'tmp/',

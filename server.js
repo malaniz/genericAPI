@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({ secret: secret, resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/api/', expressJwt({secret: secret}));
+app.use('/2api/', expressJwt({secret: secret}));
 app.use(require('express-validator')());
 
 app.post('/signup', auth.signup(db, mail));

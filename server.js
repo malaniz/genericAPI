@@ -8,7 +8,7 @@ app.set('env', process.env.ENV || 'development');
 var config     = require('./config').init(app),
     db         = require('monk')(config.APP.DB_URL),
     session    = require('express-session'),
-    api        = require('./api')
+    api        = require('./api'),
 //    mail       = require('./mail'),
     auth       = require('./auth'),
     errors     = require('./errors'),

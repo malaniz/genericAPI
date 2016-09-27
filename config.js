@@ -37,7 +37,7 @@ var config = {
      },
 
     APP: {
-      DB_URL: 'localhost/xxx01',
+      DB_URL: 'mongodb://heroku_zbr98f42:ehu6q91sv8v5r1gb7j9ld2s5n7@ds041506.mlab.com:41506/heroku_zbr98f42',
       CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
       PORT: process.env.PORT || 7778,
       TMP_DIR: 'tmp/',
@@ -67,6 +67,7 @@ var config = {
 
 function init(app){
   var mode = app.get('env');
+  console.log(mode);
   return config[mode];
 }
 

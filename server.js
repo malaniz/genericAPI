@@ -2,8 +2,9 @@ var express    = require('express'),
     cors       = require('cors'),
     http       = require('http'),
     bodyParser = require('body-parser'),
-    app        = express(),
-    config     = require('./config').init(app),
+    app        = express();
+app.set('env', process.env.ENV || 'development');
+var config     = require('./config').init(app),
     db         = require('monk')(config.APP.DB_URL),
     session    = require('express-session'),
     api        = require('./api')
@@ -66,6 +67,7 @@ app.all('*', function(req, res){
 });
 
 http.createServer(app).listen(config.APP.PORT, function() { 
+  console.log(config.APP.DB_URL);
   console.log("\n[*] Server Listening on port %d", config.APP.PORT); 
 });
 

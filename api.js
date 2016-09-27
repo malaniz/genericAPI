@@ -1,3 +1,5 @@
+"use strict";
+
 parseFilters = (x) => {
   if (x instanceof Array) {
     let oresult = [];

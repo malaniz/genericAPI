@@ -1,6 +1,6 @@
 "use strict";
 
-parseFilters = (x) => {
+const parseFilters = (x) => {
   if (x instanceof Array) {
     let oresult = [];
     for (let i=0; i<x.length; i++) {

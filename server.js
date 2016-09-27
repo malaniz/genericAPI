@@ -9,7 +9,7 @@ var config     = require('./config').init(app),
     db         = require('monk')(config.APP.DB_URL),
     session    = require('express-session'),
     api        = require('./api')
-    mail       = require('./mail'),
+//    mail       = require('./mail'),
     auth       = require('./auth'),
     errors     = require('./errors'),
     passport   = require('passport'),
@@ -18,7 +18,7 @@ var config     = require('./config').init(app),
     secret     = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
 
 
-mail.init(config);
+//mail.init(config);
 
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -29,7 +29,7 @@ app.use(passport.session());
 app.use('/2api/', expressJwt({secret: secret}));
 app.use(require('express-validator')());
 
-app.post('/signup', auth.signup(db, mail));
+//app.post('/signup', auth.signup(db, mail));
 app.get ('/confirm/:token', auth.confirm(db));
 app.post('/login', auth.login(db, secret, jwt));
 

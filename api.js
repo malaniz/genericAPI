@@ -1,6 +1,7 @@
 "use strict";
 
 const parseFilters = (x) => {
+  let regParts = [];
   if (x instanceof Array) {
     let oresult = [];
     for (let i=0; i<x.length; i++) {
@@ -33,7 +34,7 @@ exports.gLst = function(db){
   return function(req, res, next) {
     var filters = req.body.filters || {};
     var options = req.body.options || {};
-    var keys,k, v, regParts, r;
+    var keys,k, v, r;
 
     console.log(filters);
     filters = parseFilters(filters);

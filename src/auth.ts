@@ -57,6 +57,7 @@ export const confirm = function (db) {
 
 export const login = function (db, secret, jwt) {
   return function (req, res, next) {
+    let usr;
     if (req.headers.authorization) {
       usr = jwt.decode(req.headers.authorization.replace('bearer ', ''));
     }

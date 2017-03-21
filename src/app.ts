@@ -6,19 +6,21 @@ import session = require('express-session')
 import passport = require('passport')
 import jwt = require('jsonwebtoken')
 import expressJwt = require('express-jwt')
+import bodyParser = require('body-parser')
 
 import settings = require('./config')
 import { gLst, gGet, gPut, gDel, gUpd } from './api'
-import mail from './mail'
-import auth from './auth'
-import errors from './errors'
+//import * as mail from './mail'
+import * as auth from './auth'
+import * as errors from './errors'
 
 const app = express();
 const config = settings.init(app);
-const db = monk(config.APP.DB_URL);
+const db = {};
 const secret = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
 
-mail.init(config);
+//mail.init(config);
+const mail = {};
 
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -35,11 +37,11 @@ app.post('/login', auth.login(db, secret, jwt));
 
 
 // generic api
-app.post('/api/:entity/lst', api.gLst(db)); 
-app.get ('/api/:entity/get', api.gGet(db)); 
-app.get ('/api/:entity/del', api.gDel(db)); 
-app.post('/api/:entity/put', api.gPut(db)); 
-app.post('/api/:entity/upd', api.gUpd(db)); 
+app.post('/api/:entity/lst', gLst(db)); 
+app.get ('/api/:entity/get', gGet(db)); 
+app.get ('/api/:entity/del', gDel(db)); 
+app.post('/api/:entity/put', gPut(db)); 
+app.post('/api/:entity/upd', gUpd(db)); 
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -56,7 +58,7 @@ app.use((err, req, res, next) => {
 
   let e = errors.type[err.error];
   delete err.error;
-  e.error = Object.assign({}, e.error, err);
+  e.error = (<any>Object).assign({}, e.error, err);
   res.status(e.error.code).json(e);
 });
 

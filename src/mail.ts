@@ -1,8 +1,10 @@
-var nodemailer     = require('nodemailer'),
-    md5            = require('MD5'),
-    smtpTransport  = null,
-    urlConfirmMail = null,
-    mailOptions    = {};
+import nodemailer = require('nodemailer')
+import md5 = require('MD5')
+let smtpTransport  = null;
+let urlConfirmMail = null;
+let mailOptions    = {
+  from: '', to: '', subject: '', html: '', text: ''
+};
 
 export const init = function (conf) {
   urlConfirmMail = conf.APP.CONFIRM_ACCOUNT_LINK;

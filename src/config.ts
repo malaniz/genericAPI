@@ -68,10 +68,8 @@ const config = {
   }
 };
 
-function init(app){
-  var mode = app.get('env');
+export const init = (app) => {
+  const mode = app.get('env');
   console.log(mode);
   return config[mode];
 }
-
-export default init;

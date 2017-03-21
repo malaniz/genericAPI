@@ -4,7 +4,7 @@ var nodemailer     = require('nodemailer'),
     urlConfirmMail = null,
     mailOptions    = {};
 
-exports.init = function (conf) {
+export const init = function (conf) {
   urlConfirmMail = conf.APP.CONFIRM_ACCOUNT_LINK;
   smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -13,7 +13,7 @@ exports.init = function (conf) {
   mailOptions.from = conf.MAIL.USER;
 };
 
-exports.sendMail = function (to, subject, body, isHtmlBody) {
+export const sendMail = function (to, subject, body, isHtmlBody) {
   mailOptions.to = to;
   mailOptions.subject = subject;
   if (isHtmlBody) {
@@ -30,7 +30,7 @@ exports.sendMail = function (to, subject, body, isHtmlBody) {
        //smtpTransport.close(); // shut down the connection pool, no more messages
   });
 };
-exports.sendConfirmateMail = function (to) {
+export const sendConfirmateMail = function (to) {
   var subject = 'Por favor, confirma tu email. Eatnow!',
       token   = md5(Date() + to),
       html    = getLinkConfirmate(to, token);

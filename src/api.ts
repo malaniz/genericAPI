@@ -1,5 +1,3 @@
-"use strict";
-
 const parseFilters = (x) => {
   let regParts = [];
   if (x instanceof Array) {
@@ -17,7 +15,7 @@ const parseFilters = (x) => {
     }
     return oresult;
   } else if ((typeof (x) === 'string') && (x[0] === '/')) {
-    let r = '';
+    let r;
     regParts = x.split('/').filter(y => y!== '');
     if (regParts.length === 2) {
       r = new RegExp(regParts[0], regParts[1]);
@@ -30,7 +28,7 @@ const parseFilters = (x) => {
   }
 }
 
-exports.gLst = function(db){
+export const gLst = function(db){
   return function(req, res, next) {
     var filters = req.body.filters || {};
     var options = req.body.options || {};
@@ -48,7 +46,7 @@ exports.gLst = function(db){
   };
 };
 
-exports.gGet = function(db) {
+export const gGet = function(db) {
   return function(req, res, next) {
     var _id = (req.query._id)? req.query._id: false;
     if(!_id) {
@@ -67,7 +65,7 @@ exports.gGet = function(db) {
   };
 };
 
-exports.gDel = function(db){
+export const gDel = function(db){
   return function(req, res, next) {
     var _id = (req.query._id)? req.query._id: false;
     if(!_id) {
@@ -85,7 +83,7 @@ exports.gDel = function(db){
 };
 
 
-exports.gPut = function(db){
+export const gPut = function(db){
   return function(req, res, next) {
     var data = (req.body.data)? req.body.data: false;
     console.log(req.body);
@@ -103,7 +101,7 @@ exports.gPut = function(db){
   };
 };
 
-exports.gUpd = function(db){
+export const gUpd = function(db){
   return function(req, res, next) {
     var data = (req.body.data)? req.body.data: false;
     if (!data || !('_id' in data)) {
@@ -121,5 +119,3 @@ exports.gUpd = function(db){
     });
   };
 };
-
-

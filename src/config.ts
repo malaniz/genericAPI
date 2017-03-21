@@ -1,5 +1,8 @@
-var domain = 'http://localhost:7778';
-var config = {
+declare const __dirname;
+declare const process;
+
+const domain = 'http://localhost:7778';
+const config = {
   development: {
     MAIL: { USER:'ingnucious@gmail.com', PASS:'!QAZXSW"', TRANSPORT:'SMTP' },
     // habria que setear usuarios por defecto
@@ -71,4 +74,4 @@ function init(app){
   return config[mode];
 }
 
-exports.init = init;
+export default init;

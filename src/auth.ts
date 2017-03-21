@@ -1,6 +1,6 @@
-var md5  = require('MD5');
+import md5  = require('MD5');
 
-exports.signup = function (db, mail) {
+export const signup = function (db, mail) {
   return function (req, res, next) {
     var usr, users, token;
     console.log(req.body.signup);
@@ -28,7 +28,7 @@ exports.signup = function (db, mail) {
   };
 };
 
-exports.confirm = function (db) {
+export const confirm = function (db) {
   return function (req, res, next) {
     req.checkParams('token', 'required').notEmpty();
     req.checkParams('token', 'invalid').len(15, 200);
@@ -55,7 +55,7 @@ exports.confirm = function (db) {
   };
 };
 
-exports.login = function (db, secret, jwt) {
+export const login = function (db, secret, jwt) {
   return function (req, res, next) {
     if (req.headers.authorization) {
       usr = jwt.decode(req.headers.authorization.replace('bearer ', ''));
@@ -85,7 +85,7 @@ exports.login = function (db, secret, jwt) {
   };
 };
 
-exports.logged  = function (req, res, next) {
+export const logged  = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
   next({error: 'INVALID_CREDENTIALS'});

@@ -4,27 +4,35 @@
   "license": "ISC",
   "version": "0.0.0",
   "description": "API for futuro ars app",
-  "main": "server.js",
+  "main": "build/apps.js",
   "dependencies": {
     "MD5": "^1.2.2",
+    "awesome-typescript-loader": "^3.1.2",
     "body-parser": "^1.13.2",
     "cors": "^2.8.1",
     "express": "^4.12.4",
     "express-jwt": "^3.0.1",
     "express-session": "^1.11.3",
     "express-validator": "^2.13.0",
+    "json-loader": "^0.5.4",
     "jsonfile": "^2.0.1",
     "jsonwebtoken": "^5.0.2",
     "mail": "^0.2.3",
     "mongodb": "^1.4.40",
     "monk": "^1.0.1",
     "nodemailer": "^1.3.4",
-    "passport": "^0.2.2"
+    "passport": "^0.2.2",
+    "typescript": "^2.2.1",
+    "typings": "^2.1.0"
   },
   "scripts": {
-    "start": "nodemon server.js 0.0.0.0"
+    "start": "webpack --config webpack/webpack.js --watch"
   },
   "devDependencies": {
-    "nodemon": "^1.10.2"
+    "nodemon": "^1.10.2",
+    "webpack": "^2.1.0-beta.22"
+  },
+  "engines": {
+    "node": ">=5.0.0"
   }
 }

@@ -1,22 +1,25 @@
 const http = require('http')
 const express = require('express')
 const cors = require('cors')
-const monk = require('monk')
+const { MongoClient } = require('mongodb')
 const session = require('express-session')
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
 const settings = require('./config')
-const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
 const auth = require('./auth');
 const errors = require('./errors');
+const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
 //const * as mail from './mail'
 
 const app = express();
 const config = settings.init(app);
-const db = {};
 const secret = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
+let db = {};
+MongoClient.connect(config.APP.DB_URL, (
+  (err, database) => err ? console.log('Unable to connect to mongodb', err) : (db = database)
+));
 
 //mail.init(config);
 const mail = {};

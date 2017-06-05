@@ -1,6 +1,6 @@
-import md5  = require('MD5');
+const md5 = require('MD5');
 
-export const signup = function (db, mail) {
+exports.signup = function (db, mail) {
   return function (req, res, next) {
     var usr, users, token;
     console.log(req.body.signup);
@@ -12,8 +12,8 @@ export const signup = function (db, mail) {
           next({error: 'UNPROCESSABLE_ENTITY', message: 'User exist in the system'})
           return;
         } else {
-          // habria que ver si se puede guardar el token que luego 
-          // se usa para auth. Asi cada vez que inica el dispositivo y si se 
+          // habria que ver si se puede guardar el token que luego
+          // se usa para auth. Asi cada vez que inica el dispositivo y si se
           // reinicio el server ... no pierde el login.
           token = mail.sendConfirmateMail(req.body.username);
           req.body.signup.approved = true;
@@ -28,7 +28,7 @@ export const signup = function (db, mail) {
   };
 };
 
-export const confirm = function (db) {
+exports.confirm = function (db) {
   return function (req, res, next) {
     req.checkParams('token', 'required').notEmpty();
     req.checkParams('token', 'invalid').len(15, 200);
@@ -55,7 +55,7 @@ export const confirm = function (db) {
   };
 };
 
-export const login = function (db, secret, jwt) {
+exports.login = function (db, secret, jwt) {
   return function (req, res, next) {
     let usr;
     if (req.headers.authorization) {
@@ -86,7 +86,7 @@ export const login = function (db, secret, jwt) {
   };
 };
 
-export const logged  = function (req, res, next) {
+exports.logged  = function (req, res, next) {
   if (req.isAuthenticated())
     return next();
   next({error: 'INVALID_CREDENTIALS'});

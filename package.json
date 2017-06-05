@@ -26,6 +26,7 @@
     "start": "./node_modules/.bin/nodemon server.js"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0"
   },
   "engines": {
     "node": ">=5.0.0"

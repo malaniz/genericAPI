@@ -1,18 +1,17 @@
-import http = require('http')
-import express = require('express')
-import cors = require('cors')
-import monk = require('monk')
-import session = require('express-session')
-import passport = require('passport')
-import jwt = require('jsonwebtoken')
-import expressJwt = require('express-jwt')
-import bodyParser = require('body-parser')
-
-import settings = require('./config')
-import { gLst, gGet, gPut, gDel, gUpd } from './api'
-//import * as mail from './mail'
-import * as auth from './auth'
-import * as errors from './errors'
+const http = require('http')
+const express = require('express')
+const cors = require('cors')
+const monk = require('monk')
+const session = require('express-session')
+const passport = require('passport')
+const jwt = require('jsonwebtoken')
+const expressJwt = require('express-jwt')
+const bodyParser = require('body-parser')
+const settings = require('./config')
+const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
+const auth = require('./auth');
+const errors = require('./errors');
+//const * as mail from './mail'
 
 const app = express();
 const config = settings.init(app);
@@ -37,11 +36,11 @@ app.post('/login', auth.login(db, secret, jwt));
 
 
 // generic api
-app.post('/api/:entity/lst', gLst(db)); 
-app.get ('/api/:entity/get', gGet(db)); 
-app.get ('/api/:entity/del', gDel(db)); 
-app.post('/api/:entity/put', gPut(db)); 
-app.post('/api/:entity/upd', gUpd(db)); 
+app.post('/api/:entity/lst', gLst(db));
+app.get ('/api/:entity/get', gGet(db));
+app.get ('/api/:entity/del', gDel(db));
+app.post('/api/:entity/put', gPut(db));
+app.post('/api/:entity/upd', gUpd(db));
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -58,16 +57,16 @@ app.use((err, req, res, next) => {
 
   let e = errors.type[err.error];
   delete err.error;
-  e.error = (<any>Object).assign({}, e.error, err);
+  e.error = Object.assign({}, e.error, err);
   res.status(e.error.code).json(e);
 });
 
-app.all('*', function(req, res){ 
+app.all('*', function(req, res){
   res.status(404).json(errors.type.NOT_FOUND);
 });
 
-http.createServer(app).listen(config.APP.PORT, function() { 
+http.createServer(app).listen(config.APP.PORT, function() {
   console.log(config.APP.DB_URL);
-  console.log("\n[*] Server Listening on port %d", config.APP.PORT); 
+  console.log("\n[*] Server Listening on port %d", config.APP.PORT);
 });
 

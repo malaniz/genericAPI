@@ -28,7 +28,7 @@ const parseFilters = (x) => {
   }
 }
 
-export const gLst = function(db){
+exports.gLst = function(db){
   return function(req, res, next) {
     var filters = req.body.filters || {};
     var options = req.body.options || {};
@@ -46,7 +46,7 @@ export const gLst = function(db){
   };
 };
 
-export const gGet = function(db) {
+exports.gGet = function(db) {
   return function(req, res, next) {
     var _id = (req.query._id)? req.query._id: false;
     if(!_id) {
@@ -65,7 +65,7 @@ export const gGet = function(db) {
   };
 };
 
-export const gDel = function(db){
+exports.gDel = function(db){
   return function(req, res, next) {
     var _id = (req.query._id)? req.query._id: false;
     if(!_id) {
@@ -83,7 +83,7 @@ export const gDel = function(db){
 };
 
 
-export const gPut = function(db){
+exports.gPut = function(db){
   return function(req, res, next) {
     var data = (req.body.data)? req.body.data: false;
     console.log(req.body);
@@ -91,7 +91,7 @@ export const gPut = function(db){
       next({error: 'BAD_REQUEST', message: 'No data to put'});
       return;
     }
-    
+
     db.get(req.params.entity).insert(data, function(err, doc) {
       if (err) {
         next({error: 'SERVER_ERROR'});
@@ -101,7 +101,7 @@ export const gPut = function(db){
   };
 };
 
-export const gUpd = function(db){
+exports.gUpd = function(db){
   return function(req, res, next) {
     var data = (req.body.data)? req.body.data: false;
     if (!data || !('_id' in data)) {

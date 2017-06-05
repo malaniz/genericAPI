@@ -11,18 +11,19 @@ const settings = require('./config')
 const auth = require('./auth');
 const errors = require('./errors');
 const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
-//const * as mail from './mail'
+const mail = require('./mail')
 
 const app = express();
 const config = settings.init(app);
 const secret = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
 let db = {};
 MongoClient.connect(config.APP.DB_URL, (
-  (err, database) => err ? console.log('Unable to connect to mongodb', err) : (db = database)
+  (err, database) => err ?
+    console.log('Unable to connect to mongodb', err) :
+    (db = database)
 ));
 
 //mail.init(config);
-const mail = {};
 
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));

@@ -7,23 +7,18 @@ const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
+const Mercadopago = require('mercadopago');
 const settings = require('./config')
 const auth = require('./auth');
 const errors = require('./errors');
 const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
+const { mpGet, mpQr } = require('./mp');
 const mail = require('./mail')
 
 const app = express();
 const config = settings.init(app);
+const mp = new Mercadopago(config.MP.KEY, config.MP.SECRET);
 const secret = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
-let db = {};
-MongoClient.connect(config.APP.DB_URL, (
-  (err, database) => err ?
-    console.log('Unable to connect to mongodb', err) :
-    (db = database)
-));
-
-//mail.init(config);
 
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -31,20 +26,43 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(session({ secret: secret, resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/api/', expressJwt({secret: secret}));
+app.use('/papi/', expressJwt({secret: secret}));
 app.use(require('express-validator')());
 
-app.post('/signup', auth.signup(db, mail));
-app.get ('/confirm/:token', auth.confirm(db));
-app.post('/login', auth.login(db, secret, jwt));
 
+MongoClient.connect(config.APP.DB_URL, (
+  (err, database) => {
+    if(err){
+      console.log('Unable to connect to mongodb', err)
+      return;
+    }
+    db = database;
 
-// generic api
-app.post('/api/:entity/lst', gLst(db));
-app.get ('/api/:entity/get', gGet(db));
-app.get ('/api/:entity/del', gDel(db));
-app.post('/api/:entity/put', gPut(db));
-app.post('/api/:entity/upd', gUpd(db));
+    //mail.init(config);
+
+    app.post('/signup', auth.signup(db, mail));
+    app.get ('/confirm/:token', auth.confirm(db));
+    app.post('/login', auth.login(db, secret, jwt));
+
+    // generic api
+    app.post('/api/:entity/lst', gLst(db));
+    app.get ('/api/:entity/get', gGet(db));
+    app.get ('/api/:entity/del', gDel(db));
+    app.post('/api/:entity/put', gPut(db));
+    app.post('/api/:entity/upd', gUpd(db));
+    app.get('/mp/get', mpGet(mp));
+    app.get('/mp/qr', mpQr(mp));
+
+    app.all('*', function(req, res){
+      res.status(404).json(errors.type.NOT_FOUND);
+    });
+
+    http.createServer(app).listen(config.APP.PORT, function() {
+      console.log(config.APP.DB_URL);
+      console.log("\n[*] Server Listening on port %d", config.APP.PORT);
+    });
+  }
+));
 
 // Global error handler
 app.use((err, req, res, next) => {
@@ -63,14 +81,5 @@ app.use((err, req, res, next) => {
   delete err.error;
   e.error = Object.assign({}, e.error, err);
   res.status(e.error.code).json(e);
-});
-
-app.all('*', function(req, res){
-  res.status(404).json(errors.type.NOT_FOUND);
-});
-
-http.createServer(app).listen(config.APP.PORT, function() {
-  console.log(config.APP.DB_URL);
-  console.log("\n[*] Server Listening on port %d", config.APP.PORT);
 });
 

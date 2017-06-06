@@ -2,10 +2,10 @@
 const domain = 'http://localhost:7778';
 const config = {
   development: {
-    MAIL: { 
-      USER:'youremail@gmail.com', 
-      PASS:'!QAZXSW"', 
-      TRANSPORT:'SMTP' 
+    MAIL: {
+      USER:'youremail@gmail.com',
+      PASS:'!QAZXSW"',
+      TRANSPORT:'SMTP'
     },
     APP: {
       DB_URL: 'mongodb://localhost:27017/xxx01',
@@ -30,6 +30,10 @@ const config = {
         SECRET: '',
         CALLBACK: domain + "/auth/google/callback"
       }
+    },
+    MP: {
+      KEY: '',
+      SECRET: ''
     }
   },
   production: {

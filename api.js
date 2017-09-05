@@ -35,9 +35,7 @@ exports.gLst = db => (req, res, next) => {
   let options = req.body.options || {};
   let keys,k, v, r;
 
-  console.log(req.params);
   filters = parseFilters(filters);
-  console.log(db);
   db.collection(req.params.entity)
     .find(filters).toArray((err, doc) => {
       if (err) {
@@ -88,7 +86,6 @@ exports.gDel = function(db){
 exports.gPut = function(db){
   return function(req, res, next) {
     var data = (req.body.data)? req.body.data: false;
-    console.log(req.body);
     if (!data) {
       next({error: 'BAD_REQUEST', message: 'No data to put'});
       return;

@@ -44,40 +44,6 @@ exports.gLst = db => (req, res, next) => {
         next({error: 'SERVER_ERROR'});
         return;
       }
-      const { format } = req.query;
-      const stylesheet = `
-        table td{
-          font-size: 10px;
-        }
-      `;
-      if (format && format === 'pdf') {
-        jsreport.render({
-          template: {
-            content:`
-              <style>
-                ${stylesheet}
-              </style>
-              <h1> Lista <h1>
-              <table>
-                {{#each items}}
-                <t>
-                  <td> {{email}} </td>
-                  <td> {{_id}} </td>
-                </tr>
-                {{/each}}
-              </table>`,
-            recipe: 'phantom-pdf',
-            engine: 'handlebars',
-            phantom: {
-              header: "<p>Ferreteria Don Pedro</p>",
-              orientation: "landscape",
-              width: "300px"
-            }
-          },
-          data: { items: doc },
-        }).then(out => out.stream.pipe(res));
-        return;
-      }
       res.json(doc);
     });
 };

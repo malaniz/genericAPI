@@ -31,12 +31,11 @@ app.use(require('express-validator')());
 
 
 MongoClient.connect(config.APP.DB_URL, (
-  (err, database) => {
+  (err, db) => {
     if(err){
       console.log('Unable to connect to mongodb', err)
       return;
     }
-    db = database;
 
     //mail.init(config);
 

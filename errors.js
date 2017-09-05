@@ -1,4 +1,4 @@
-export const type = { 
+exports.type = {
 
   "BAD_REQUEST": {
     "error": {

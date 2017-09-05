@@ -1,12 +1,13 @@
-import nodemailer = require('nodemailer')
-import md5 = require('MD5')
+const nodemailer = require('nodemailer');
+const md5 = require('MD5');
+
 let smtpTransport  = null;
 let urlConfirmMail = null;
 let mailOptions    = {
   from: '', to: '', subject: '', html: '', text: ''
 };
 
-export const init = function (conf) {
+exports.init = (conf) => {
   urlConfirmMail = conf.APP.CONFIRM_ACCOUNT_LINK;
   smtpTransport = nodemailer.createTransport({
     service: 'gmail',
@@ -15,7 +16,7 @@ export const init = function (conf) {
   mailOptions.from = conf.MAIL.USER;
 };
 
-export const sendMail = function (to, subject, body, isHtmlBody) {
+exports.sendMail = (to, subject, body, isHtmlBody) => {
   mailOptions.to = to;
   mailOptions.subject = subject;
   if (isHtmlBody) {
@@ -32,7 +33,7 @@ export const sendMail = function (to, subject, body, isHtmlBody) {
        //smtpTransport.close(); // shut down the connection pool, no more messages
   });
 };
-export const sendConfirmateMail = function (to) {
+exports.sendConfirmateMail = (to) => {
   var subject = 'Por favor, confirma tu email. Eatnow!',
       token   = md5(Date() + to),
       html    = getLinkConfirmate(to, token);
@@ -40,6 +41,6 @@ export const sendConfirmateMail = function (to) {
   return token;
 };
 
-function getLinkConfirmate(to, token) {
-  return '<a href="' + urlConfirmMail + '/' + token + '"> Click aqui para confirmar</a>';
-}
+const getLinkConfirmate = (to, token)  => (
+  `<a href="${urlConfirmMail}/${token}"> Click aqui para confirmar</a>`
+)

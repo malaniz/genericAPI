@@ -37,3 +37,4 @@ archive/
 archive/*
 build/*
 src/*.js
+.idea/

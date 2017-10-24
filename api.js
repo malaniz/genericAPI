@@ -48,13 +48,13 @@ exports.gLst = db => (req, res, next) => {
 
 exports.gGet = function(db) {
   return function(req, res, next) {
-    var _id = (req.query._id)? req.query._id: false;
+    const _id = (req.query._id)? req.query._id: false;
     if(!_id) {
       next({error: 'BAD_REQUEST', message: 'No _id to get'});
       return;
     }
 
-    db.get(req.params.entity).findById(_id, {}, function(err, doc){
+    db.collection(req.params.entity).findById(_id, {}, function(err, doc){
       if (err) {
         next({error: 'SERVER_ERROR'});
         return;
@@ -67,12 +67,12 @@ exports.gGet = function(db) {
 
 exports.gDel = function(db){
   return function(req, res, next) {
-    var _id = (req.query._id)? req.query._id: false;
+    const _id = (req.query._id)? req.query._id: false;
     if(!_id) {
       next({error: 'BAD_REQUEST', message: 'No _id to delete'});
       return;
     }
-    db.get(req.params.entity).remove({_id: _id}, function(err, doc){
+    db.collection(req.params.entity).remove({_id: _id}, function(err, doc){
       if (err) {
         next({error: 'SERVER_ERROR'});
         return;
@@ -85,13 +85,13 @@ exports.gDel = function(db){
 
 exports.gPut = function(db){
   return function(req, res, next) {
-    var data = (req.body.data)? req.body.data: false;
+    const data = (req.body.data)? req.body.data: false;
     if (!data) {
       next({error: 'BAD_REQUEST', message: 'No data to put'});
       return;
     }
 
-    db.get(req.params.entity).insert(data, function(err, doc) {
+    db.collection(req.params.entity).insert(data, function(err, doc) {
       if (err) {
         next({error: 'SERVER_ERROR'});
       }
@@ -102,14 +102,14 @@ exports.gPut = function(db){
 
 exports.gUpd = function(db){
   return function(req, res, next) {
-    var data = (req.body.data)? req.body.data: false;
+    const data = (req.body.data)? req.body.data: false;
     if (!data || !('_id' in data)) {
       next({error: 'BAD_REQUEST', message: 'No data or _id to update'});
       return;
     }
-    var updData = JSON.parse(JSON.stringify(data));
+    const updData = JSON.parse(JSON.stringify(data));
     delete updData._id;
-    db.get(req.params.entity).update({'_id': data._id}, {$set: updData}, function(err, doc) {
+    db.collection(req.params.entity).update({'_id': data._id}, {$set: updData}, function(err, doc) {
       if (err) {
         next({error: 'SERVER_ERROR'});
         return;

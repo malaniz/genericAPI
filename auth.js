@@ -2,7 +2,7 @@ const md5 = require('MD5');
 
 exports.signup = function (db, mail) {
   return function (req, res, next) {
-    var usr, users, token;
+    let usr, users, token;
     console.log(req.body.signup);
 
     // existe el usuario?
@@ -32,7 +32,7 @@ exports.confirm = function (db) {
   return function (req, res, next) {
     req.checkParams('token', 'required').notEmpty();
     req.checkParams('token', 'invalid').len(15, 200);
-    var errors = req.validationErrors();
+    const errors = req.validationErrors();
     if (errors) {
         res.json({
         err: 'Invalid parameters',
@@ -40,7 +40,7 @@ exports.confirm = function (db) {
       }, 500);
       return;
     }
-    var users = db.get('users');
+    const users = db.get('users');
       users.update({ token: req.params.token }, {
       $set: {
         approved: true,
@@ -67,7 +67,7 @@ exports.login = function (db, secret, jwt) {
       db.get('users').findOne(req.body.credentials)
         .then( function (usr) {
           if (usr!== null) {
-            var token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
+            const token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
             usr.token = token;
             usr.id = usr._id;
             delete usr.password;

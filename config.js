@@ -1,5 +1,8 @@
 
-const domain = 'http://localhost:7778';
+const port = process.env.PORT || 7778;
+const db = process.env.DB || 'test';
+const host = process.env.HOST || 'localhost';
+const domain = `http://${host}:${port}`;
 const config = {
   development: {
     MAIL: {
@@ -8,9 +11,9 @@ const config = {
       TRANSPORT:'SMTP'
     },
     APP: {
-      DB_URL: 'mongodb://localhost:27017/xxx01',
+      DB_URL: `mongodb://localhost:27017/${db}`,
       CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
-      PORT: process.env.PORT || 7778,
+      PORT: port,
       TMP_DIR: 'tmp/',
       UPLOAD_DIR: __dirname + '/app/uploads/'
     },
@@ -44,9 +47,9 @@ const config = {
      },
 
     APP: {
-      DB_URL: 'mongodb://localhost:27017/xxx01',
+      DB_URL: `mongodb://localhost:27017/${db}`,
       CONFIRM_ACCOUNT_LINK: domain + '/confirm/email',
-      PORT: process.env.PORT || 7778,
+      PORT: port,
       TMP_DIR: 'tmp/',
       UPLOAD_DIR: __dirname + '/app/uploads/'
     },

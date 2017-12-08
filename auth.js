@@ -67,7 +67,7 @@ exports.login = function (db, secret, jwt) {
       db.get('users').findOne(req.body.credentials)
         .then( function (usr) {
           if (usr!== null) {
-            const token = jwt.sign(usr, secret, { expiresinminutes: 60 * 5 });
+            const token = jwt.sign(usr, secret, { expiresIn: 60 * 5 });
             usr.token = token;
             usr.id = usr._id;
             delete usr.password;

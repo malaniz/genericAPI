@@ -7,17 +7,14 @@ const passport = require('passport')
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
 const bodyParser = require('body-parser')
-const Mercadopago = require('mercadopago');
 const settings = require('./config')
 const auth = require('./auth');
 const errors = require('./errors');
 const { gLst, gGet, gPut, gDel, gUpd } = require('./api')
-const { mpGet, mpQr } = require('./mp');
 const mail = require('./mail')
 
 const app = express();
 const config = settings.init(app);
-const mp = new Mercadopago(config.MP.KEY, config.MP.SECRET);
 const secret = "4$4bmQH23+$IFTRMv34R5seffeceE0EmC8YQ4o$";
 
 app.use(cors());
@@ -49,8 +46,6 @@ MongoClient.connect(config.APP.DB_URL, (
     app.get ('/api/:entity/del', gDel(db));
     app.post('/api/:entity/put', gPut(db));
     app.post('/api/:entity/upd', gUpd(db));
-    app.get('/mp/get', mpGet(mp));
-    app.get('/mp/qr', mpQr(mp));
 
     app.all('*', function(req, res){
       res.status(404).json(errors.type.NOT_FOUND);

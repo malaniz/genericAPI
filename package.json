@@ -16,7 +16,7 @@
     "json-loader": "^0.5.7",
     "jsonfile": "^2.4.0",
     "jsonwebtoken": "^7.4.3",
-    "jsreport": "^1.8.2",
+    "jsreport": "^3.8.0",
     "mail": "^0.2.3",
     "mercadopago": "^0.5.0",
     "mongodb": "^2.2.33",
